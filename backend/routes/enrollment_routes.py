@@ -24,6 +24,7 @@ def enroll_course():
         return jsonify({"msg": "Course not found"}), 404
 
     capacity = course.get("capacity", 0)
+    course_credit_hours = course.get("credit_hours", 3)  # Default to 3 if not specified
 
     # Count current enrollments
     enrolled_count = mongo.db.enrollments.count_documents({
@@ -46,6 +47,25 @@ def enroll_course():
 
     if existing:
         return jsonify({"msg": "Already enrolled"}), 400
+
+    # Check credit hour limit (20 credit hours max)
+    user_enrollments = mongo.db.enrollments.find({
+        "user_id": ObjectId(user_id),
+        "status": "enrolled"
+    })
+    
+    total_credit_hours = 0
+    for enrollment in user_enrollments:
+        enrolled_course = mongo.db.courses.find_one({"_id": enrollment["course_id"]})
+        if enrolled_course:
+            total_credit_hours += enrolled_course.get("credit_hours", 3)
+    
+    if total_credit_hours + course_credit_hours > 20:
+        return jsonify({
+            "msg": "Credit hour limit reached",
+            "current_credit_hours": total_credit_hours,
+            "max_credit_hours": 20
+        }), 400
 
     # Create enrollment
     mongo.db.enrollments.insert_one({
@@ -83,5 +103,22 @@ def my_enrollments():
                 "level": course.get("level"),
                 "enrolled_at": e.get("enrolled_at")
             })
-
+    
+    print(f"Enrolled courses for user {user_id}: {len(results)} courses")
     return jsonify(results), 200
+
+@enrollment_bp.delete("/<course_id>")
+@jwt_required()
+def remove_enrollment(course_id):
+    user_id = get_jwt_identity()
+    
+    result = mongo.db.enrollments.delete_one({
+        "user_id": ObjectId(user_id),
+        "course_id": ObjectId(course_id),
+        "status": "enrolled"
+    })
+    
+    if result.deleted_count > 0:
+        return jsonify({"msg": "Enrollment removed"}), 200
+    else:
+        return jsonify({"msg": "Enrollment not found"}), 404

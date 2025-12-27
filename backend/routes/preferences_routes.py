@@ -25,3 +25,20 @@ def save_preferences():
     mongo.db.preferences.insert_one(doc)
 
     return jsonify({"msg": "Preferences saved"}), 201
+
+@preferences_bp.route("/", methods=["GET"])
+@jwt_required()
+def get_preferences():
+    user_id = get_jwt_identity()
+    
+    # Get the most recent preferences for this user
+    prefs = mongo.db.preferences.find_one(
+        {"user_id": user_id},
+        sort=[("created_at", -1)]
+    )
+    
+    if not prefs:
+        return jsonify({"msg": "No preferences found"}), 404
+    
+    prefs["_id"] = str(prefs["_id"])
+    return jsonify(prefs), 200
