@@ -1,117 +1,135 @@
+"""
+Evaluate recommendation system accuracy
+Tests Precision@K, Recall@K, and Hit Rate@K
+"""
 from app import create_app
 from database.mongo import mongo
-from ml.evaluation import precision_at_k, hit_rate_at_k
-from ml.hybrid_recommender import (
-    compute_content_similarity,
-    compute_feedback_scores,
-    hybrid_score
-)
-from ml.tfidf_cache import tfidf_matrix, vectorizer
+from ml.recommendation_engine import recommendation_engine
 from ml.preprocessing import preprocess_text
-from ml.course_cache import get_courses
 import numpy as np
 
-K = 3
-RELEVANCE_THRESHOLD = 4  # rating >= 4 is relevant
+# Configuration
+K_VALUES = [3, 5, 10]
+RELEVANCE_THRESHOLD = 4  # Rating >= 4 is considered relevant
 
+# Initialize Flask app
 app = create_app()
 
-with app.app_context():
-    users = list(mongo.db.users.find())
+def run_evaluation():
+    """Run evaluation on all users with feedback"""
+    
+    with app.app_context():
+        # Load models
+        if not recommendation_engine.load_models():
+            print("❌ Failed to load models. Run rebuild_models.py first.")
+            return
+        
+        print("\n" + "="*60)
+        print("RECOMMENDATION SYSTEM EVALUATION")
+        print("="*60)
+        
+        # Get all users
+        users = list(mongo.db.users.find({"role": "student"}))
+        print(f"Found {len(users)} student users")
+        
+        # Store evaluation results
+        all_results = {k: {"precision": [], "recall": [], "hit_rate": []} for k in K_VALUES}
+        evaluated_users = 0
+        
+        for user in users:
+            user_id = str(user["_id"])
+            user_name = user.get("name", "Unknown")
+            
+            # Get user's feedback
+            feedback = list(mongo.db.feedback.find({"user_id": user_id}))
+            
+            if not feedback:
+                continue  # Skip users with no feedback
+            
+            # Identify relevant courses (rating >= RELEVANCE_THRESHOLD)
+            relevant_course_codes = [
+                fb["course_code"]
+                for fb in feedback
+                if fb.get("rating", 0) >= RELEVANCE_THRESHOLD
+            ]
+            
+            if not relevant_course_codes:
+                continue  # Skip users with no relevant courses
+            
+            evaluated_users += 1
+            
+            # Build user query from feedback comments
+            query_text = " ".join([fb.get("comment", "") for fb in feedback])
+            if not query_text.strip():
+                query_text = "computer science programming"  # Fallback
+            
+            # Get all courses
+            all_courses = list(mongo.db.courses.find({}))
+            course_codes = [c["course_code"] for c in all_courses]
+            
+            # Generate recommendations
+            try:
+                final_scores, alpha, _, _ = recommendation_engine.hybrid_recommend(
+                    user_query=query_text,
+                    course_codes=course_codes,
+                    feedback_docs=feedback
+                )
+                
+                # Get ranked course codes
+                ranked_indices = np.argsort(final_scores)[::-1]
+                recommended_codes = [course_codes[i] for i in ranked_indices]
+                
+                # Evaluate for each K
+                for k in K_VALUES:
+                    precision = recommendation_engine.precision_at_k(
+                        recommended_codes, relevant_course_codes, k
+                    )
+                    recall = recommendation_engine.recall_at_k(
+                        recommended_codes, relevant_course_codes, k
+                    )
+                    hit_rate = recommendation_engine.hit_rate_at_k(
+                        recommended_codes, relevant_course_codes, k
+                    )
+                    
+                    all_results[k]["precision"].append(precision)
+                    all_results[k]["recall"].append(recall)
+                    all_results[k]["hit_rate"].append(hit_rate)
+                
+                print(f"✓ Evaluated {user_name}: {len(relevant_course_codes)} relevant courses")
+                
+            except Exception as e:
+                print(f"✗ Error evaluating {user_name}: {e}")
+                continue
+        
+        # Calculate and display results
+        print("\n" + "="*60)
+        print("EVALUATION RESULTS")
+        print("="*60)
+        print(f"Evaluated Users: {evaluated_users}")
+        print(f"Relevance Threshold: {RELEVANCE_THRESHOLD} stars\n")
+        
+        if evaluated_users == 0:
+            print("⚠️  No users with sufficient feedback to evaluate")
+            return
+        
+        for k in K_VALUES:
+            precision_scores = all_results[k]["precision"]
+            recall_scores = all_results[k]["recall"]
+            hit_rate_scores = all_results[k]["hit_rate"]
+            
+            avg_precision = np.mean(precision_scores) if precision_scores else 0
+            avg_recall = np.mean(recall_scores) if recall_scores else 0
+            avg_hit_rate = np.mean(hit_rate_scores) if hit_rate_scores else 0
+            
+            print(f"K = {k}:")
+            print(f"  Precision@{k}: {avg_precision:.3f}")
+            print(f"  Recall@{k}:    {avg_recall:.3f}")
+            print(f"  Hit Rate@{k}:  {avg_hit_rate:.3f}")
+            print()
+        
+        print("="*60)
+        print("\n✅ Evaluation complete!\n")
 
-    precision_scores = []
-    hit_rates = []
 
-    for user in users:
-        user_id = str(user["_id"])
-
-        feedback = list(mongo.db.feedback.find({"user_id": user_id}))
-        if not feedback:
-            continue
-
-        # Relevant courses (ground truth)
-        relevant_course_ids = [
-            fb["course_code"]
-            for fb in feedback
-            if fb.get("rating", 0) >= RELEVANCE_THRESHOLD
-        ]
-
-        if not relevant_course_ids:
-            continue
-
-        # Use feedback comments as query proxy
-        query_text = " ".join([fb.get("comment", "") for fb in feedback])
-        cleaned = preprocess_text(query_text)
-        query_vec = vectorizer.transform([cleaned])
-
-        courses = get_courses()
-        course_ids = [c["course_code"] for c in courses]
-
-        content_scores = compute_content_similarity(tfidf_matrix, query_vec)
-        feedback_scores = compute_feedback_scores(
-            course_ids,
-            feedback
-        )
-
-        final_scores = hybrid_score(
-            content_scores,
-            feedback_scores,
-            num_feedback=len(feedback)
-        )
-
-        ranked_indices = np.argsort(final_scores)[::-1]
-        recommended_ids = [course_ids[i] for i in ranked_indices]
-
-        precision_scores.append(
-            precision_at_k(recommended_ids, relevant_course_ids, K)
-        )
-        hit_rates.append(
-            hit_rate_at_k(recommended_ids, relevant_course_ids, K)
-        )
-
-    print("===== EVALUATION RESULTS =====")
-    print(f"Precision@{K}: {sum(precision_scores)/len(precision_scores):.3f}")
-    print(f"Hit Rate@{K}: {sum(hit_rates)/len(hit_rates):.3f}")
-
-
-
-##from ml.evaluation import precision_at_k, recall_at_k
-#from ml.hybrid_recommender import hybrid_recommend
-##from database.mongo import mongo
-#from app import create_app
-
-#app = create_app()
-
-#with app.app_context():
- #   users = mongo.db.users.find()
-#
- #   K = 5
-#
- #   for user in users:
-  #      user_id = str(user["_id"])
-#
- #       # Get user feedback (ground truth)
-  #      feedback = mongo.db.feedback.find({"user_id": user_id})
-   #     relevant_courses = [
-    #        f["course_id"] for f in feedback if f.get("rating", 0) >= 4
-      #  ]
-
-    #    if not relevant_courses:
-    #        continue
-
-        # Run hybrid recommendation
-     #   results = hybrid_recommend(
-#            query="data science machine learning",
- #           user_id=user_id
-     #   )
-
-#        recommended = [r["course"] for r in results]
-
- #       p_k = precision_at_k(recommended, relevant_courses, K)
-  #      r_k = recall_at_k(recommended, relevant_courses, K)
-
-   #     print(f"User {user_id}")
-    #    print(f"Precision@{K}: {p_k:.2f}")
-     #   print(f"Recall@{K}: {r_k:.2f}")
-    #    print("-" * 30)
-
+if __name__ == "__main__":
+    run_evaluation()

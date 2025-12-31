@@ -9,6 +9,7 @@ import '../../services/user_service.dart';
 import '../../services/session.dart';
 import '../../services/enrollment_service.dart';
 import '../../config/api.dart';
+import '../feedback/feedback_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -60,7 +61,7 @@ class _DashboardPageState extends State<DashboardPage> {
         final data = jsonDecode(response.body);
         setState(() {
           cgpa = (data['cgpa'] ?? 0.0).toDouble();
-          
+
           // Calculate credit hours from courses_taken
           int completedCredits = 0;
           if (data['courses_taken'] != null) {
@@ -233,10 +234,12 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _buildStatColumn('CGPA', cgpa > 0 ? cgpa.toStringAsFixed(2) : 'N/A'),
+                          _buildStatColumn('CGPA',
+                              cgpa > 0 ? cgpa.toStringAsFixed(2) : 'N/A'),
                           Container(
                               height: 40, width: 1, color: Colors.grey[200]),
-                          _buildStatColumn('Credit Hours', '$currentCreditHours/$totalCreditHours'),
+                          _buildStatColumn('Credit Hours',
+                              '$currentCreditHours/$totalCreditHours'),
                         ],
                       ),
                     ),
@@ -313,6 +316,20 @@ class _DashboardPageState extends State<DashboardPage> {
                     onTap: () {},
                   ),
                   const SizedBox(height: 30),
+                  _ActionCard(
+                    title: 'Course Feedback',
+                    subtitle: 'View and submit course feedback',
+                    icon: Icons.rate_review,
+                    color: Colors.purple[400]!,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FeedbackPage(),
+                        ),
+                      );
+                    },
+                  ),
 
                   // Enrolled Courses Section
                   Row(
@@ -416,6 +433,10 @@ class _DashboardPageState extends State<DashboardPage> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
+          if (index == 2) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const FeedbackPage()));
+          }
           if (index == 3) {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const ProfilePage()));
