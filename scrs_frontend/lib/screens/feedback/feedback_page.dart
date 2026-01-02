@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../services/feedback_service.dart';
+import '../../services/feedback_services.dart';
 import '../../services/enrollment_service.dart';
 
 class FeedbackPage extends StatefulWidget {

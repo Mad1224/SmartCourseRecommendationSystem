@@ -13,6 +13,7 @@ from routes.preferences_routes import preferences_bp
 from routes.recommend_routes import recommend_routes
 from routes.academic_routes import academic_bp
 from routes.metrics_routes import metrics_bp
+from routes.advising_routes import advising_bp
 
 
 

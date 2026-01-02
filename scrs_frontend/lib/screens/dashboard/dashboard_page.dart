@@ -10,6 +10,7 @@ import '../../services/session.dart';
 import '../../services/enrollment_service.dart';
 import '../../config/api.dart';
 import '../feedback/feedback_page.dart';
+import '../course_catalog/course_catalog_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -309,14 +310,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     },
                   ),
                   _ActionCard(
-                    title: 'Course Catalog',
-                    subtitle: 'Browse all available courses',
-                    icon: Icons.book,
-                    color: Colors.orange[400]!,
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 30),
-                  _ActionCard(
                     title: 'Course Feedback',
                     subtitle: 'View and submit course feedback',
                     icon: Icons.rate_review,
@@ -326,6 +319,20 @@ class _DashboardPageState extends State<DashboardPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => const FeedbackPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  _ActionCard(
+                    title: 'Course Catalog',
+                    subtitle: 'Browse all available courses',
+                    icon: Icons.book,
+                    color: Colors.orange[400]!,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CourseCatalogPage(),
                         ),
                       );
                     },
@@ -433,11 +440,15 @@ class _DashboardPageState extends State<DashboardPage> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
-          if (index == 2) {
+          if (index == 1) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CourseCatalogPage()));
+          } else if (index == 2) {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const FeedbackPage()));
-          }
-          if (index == 3) {
+          } else if (index == 3) {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const ProfilePage()));
           }
