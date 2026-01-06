@@ -9,8 +9,7 @@ recommend_routes = Blueprint(
     url_prefix="/recommend"
 )
 
-# Initialize engine on module load
-recommendation_engine.load_models()
+# Models will be loaded by app.py during initialization
 
 @recommend_routes.route("/", methods=["GET", "POST"])
 @jwt_required()
@@ -60,29 +59,47 @@ def recommend():
     
     # ========== BUILD USER QUERY FROM PREFERENCES ==========
     user_interests = []
+    preferred_kulliyyah = None
     
     if prefs:
+        # Get kulliyyah preference for filtering
         if prefs.get("kulliyyah"):
-            user_interests.append(prefs.get("kulliyyah"))
+            preferred_kulliyyah = prefs.get("kulliyyah")
+            # Add kulliyyah with higher weight
+            user_interests.extend([preferred_kulliyyah] * 3)
+        
+        # Add preferred course types
         if prefs.get("preferredTypes"):
-            user_interests.extend(prefs.get("preferredTypes"))
+            types = prefs.get("preferredTypes")
+            user_interests.extend(types)
+            # Add related keywords based on types
+            for course_type in types:
+                if course_type.lower() == "theory":
+                    user_interests.extend(["concepts", "principles", "fundamentals"])
+                elif course_type.lower() == "practical":
+                    user_interests.extend(["hands-on", "lab", "practice", "application"])
+                elif course_type.lower() == "project-based":
+                    user_interests.extend(["project", "development", "implementation"])
+                elif course_type.lower() == "research":
+                    user_interests.extend(["research", "analysis", "study"])
+        
+        # Add topics and goals if provided (for future enhancement)
         if prefs.get("topics"):
             user_interests.extend(prefs.get("topics"))
         if prefs.get("goals"):
             user_interests.extend(prefs.get("goals"))
     
-    # Add generic CS keywords to improve matching
-    user_interests.extend([
-        "programming", "computer", "software", "data", 
-        "algorithm", "technology", "development"
-    ])
+    # Only add minimal generic keywords if no preferences at all
+    if not user_interests:
+        user_interests = ["course", "learning", "education"]
     
-    user_query = " ".join(user_interests) if user_interests else "computer science programming"
+    user_query = " ".join(user_interests)
     
     print(f"\n{'='*60}")
     print(f"RECOMMENDATION REQUEST")
     print(f"{'='*60}")
     print(f"User ID: {user_id}")
+    print(f"Preferred Kulliyyah: {preferred_kulliyyah}")
     print(f"User Query: {user_query}")
     print(f"Total Courses: {len(all_courses)}")
     print(f"Taken Courses: {len(taken_course_codes)}")
@@ -116,11 +133,31 @@ def recommend():
             
             score = float(final_scores[i]) * 100  # Convert to percentage
             
-            # Generate explanation
-            if len(feedback_docs) > 5:
-                reason = f"Recommended based on your interests and past feedback (AI match: {score:.0f}%)"
+            # Boost score if matches preferred kulliyyah
+            if preferred_kulliyyah and course.get("kulliyyah") == preferred_kulliyyah:
+                # Give significant boost to matching kulliyyah courses
+                # Apply 50% boost, with a minimum base score of 10%
+                base_score = max(score, 10)
+                score = min(base_score * 1.5, 99)
+            
+            # Generate explanation based on preferences
+            reason_parts = []
+            
+            # Check if matches kulliyyah preference
+            if preferred_kulliyyah and course.get("kulliyyah") == preferred_kulliyyah:
+                reason_parts.append(f"Matches your {preferred_kulliyyah} preference")
+            
+            # Check if matches course type preferences
+            if prefs and prefs.get("preferredTypes"):
+                reason_parts.append(f"Fits your {', '.join(prefs.get('preferredTypes'))} preference")
+            
+            # Add AI match score
+            if reason_parts:
+                reason = f"{' • '.join(reason_parts)} (Match: {score:.0f}%)"
+            elif len(feedback_docs) > 5:
+                reason = f"Based on your learning history (Match: {score:.0f}%)"
             else:
-                reason = f"AI-matched based on your interests in {', '.join(user_interests[:3])}"
+                reason = f"AI-recommended course (Match: {score:.0f}%)"
             
             recommendations.append({
                 "_id": str(course.get("_id")),
@@ -129,12 +166,15 @@ def recommend():
                 "description": course.get("description", ""),
                 "credit_hours": course.get("credit_hours", 3),
                 "level": course.get("level", 1),
+                "kulliyyah": course.get("kulliyyah", ""),
+                "program": course.get("program", ""),
                 "skills": course.get("skills", []),
                 "score": min(score, 99),  # Cap at 99%
                 "reason": reason,
                 "content_score": float(content_scores[i]) * 100,
                 "collab_score": float(collab_scores[i]) * 100,
-                "alpha": alpha_used
+                "alpha": alpha_used,
+                "matches_preference": preferred_kulliyyah == course.get("kulliyyah") if preferred_kulliyyah else False
             })
         
         # Sort by score

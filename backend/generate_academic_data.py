@@ -34,10 +34,37 @@ grades = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C']  # Most students get B-A 
 
 # Programs and kulliyyahs
 programs = {
+    # KICT
     'Computer Science': 'KICT',
     'Information Technology': 'KICT',
     'Data Science': 'KICT',
-    'Software Engineering': 'KICT'
+    'Software Engineering': 'KICT',
+    # KOE
+    'Electrical Engineering': 'KOE',
+    'Mechanical Engineering': 'KOE',
+    'Civil Engineering': 'KOE',
+    'Mechatronics Engineering': 'KOE',
+    'Manufacturing Engineering': 'KOE',
+    'Biotechnology Engineering': 'KOE',
+    # KENMS
+    'Economics': 'KENMS',
+    'Finance': 'KENMS',
+    'Management': 'KENMS',
+    'Marketing': 'KENMS',
+    # KAHS
+    'Nursing': 'KAHS',
+    'Physiotherapy': 'KAHS',
+    'Nutrition': 'KAHS',
+    # KOP
+    'Pharmacy': 'KOP',
+    # KIRKHS
+    'Islamic Studies': 'KIRKHS',
+    'Arabic Language': 'KIRKHS',
+    'English Language': 'KIRKHS',
+    'Psychology': 'KIRKHS',
+    'Sociology': 'KIRKHS',
+    'History': 'KIRKHS',
+    'Communication': 'KIRKHS'
 }
 
 # Clear existing academic data

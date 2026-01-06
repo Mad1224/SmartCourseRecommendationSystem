@@ -1,5 +1,107 @@
-course_code,course_name,description
-CSCI4401,Artificial Intelligence,"AI concepts including machine learning, search, and reasoning using Python"
-CSCI4402,Data Science,"Data analysis, visualization, statistics, and machine learning techniques"
-CSCI3301,Database Systems,"Relational databases, SQL, normalization, and database design"
-CSCI2201,Programming Fundamentals,"Basic programming concepts using Python and problem solving"
+course_code,course_name,description,level,capacity,skills,kulliyyah,program
+CSCI1100,Introduction to Computing,"Fundamentals of computing, computer systems, and digital literacy",1,3,"Computer Literacy,Digital Skills",KICT,Computer Science
+CSCI1201,Programming I,"Introduction to programming using Python, basic algorithms and problem solving",1,3,"Python,Problem Solving,Algorithms",KICT,Computer Science
+CSCI2101,Data Structures,"Arrays, linked lists, stacks, queues, trees, and algorithms",2,3,"Data Structures,Algorithms,C++",KICT,Computer Science
+CSCI2201,Object-Oriented Programming,"OOP concepts, classes, inheritance, polymorphism using Java",2,3,"Java,OOP,Design Patterns",KICT,Computer Science
+CSCI2301,Database Systems,"Relational databases, SQL, normalization, and database design",2,3,"SQL,Database Design,MySQL",KICT,Computer Science
+CSCI3101,Web Development,"HTML, CSS, JavaScript, frontend and backend web development",3,3,"HTML,CSS,JavaScript,Node.js",KICT,Computer Science
+CSCI3201,Mobile App Development,"Native and cross-platform mobile app development for iOS and Android",3,3,"Flutter,React Native,Mobile UI",KICT,Computer Science
+CSCI3301,Software Engineering,"Software development lifecycle, requirements, design, testing, maintenance",3,3,"SDLC,UML,Testing,Agile",KICT,Software Engineering
+CSCI3401,Computer Networks,"Network protocols, architecture, TCP/IP, network security",3,3,"Networking,TCP/IP,Security",KICT,Computer Science
+CSCI4101,Artificial Intelligence,"AI concepts including machine learning, search, and reasoning",4,3,"Machine Learning,Python,AI Algorithms",KICT,Computer Science
+CSCI4201,Data Science,"Data analysis, visualization, statistics, and machine learning techniques",4,3,"Python,Data Analysis,ML,Statistics",KICT,Data Science
+CSCI4301,Cybersecurity,"Network security, cryptography, ethical hacking, and security protocols",4,3,"Security,Cryptography,Ethical Hacking",KICT,Computer Science
+CSCI4401,Cloud Computing,"Cloud architecture, AWS, Azure, containerization, and microservices",4,3,"AWS,Docker,Kubernetes,DevOps",KICT,Computer Science
+CSCI4501,Big Data Analytics,"Hadoop, Spark, big data processing, and analytics techniques",4,3,"Hadoop,Spark,Big Data,Python",KICT,Data Science
+CSCI4601,Game Development,"Game design, Unity, game engines, and interactive media",4,3,"Unity,C#,Game Design",KICT,Computer Science
+CSCI4602,IoT and Embedded Systems,"Internet of Things, Arduino, sensors, and embedded programming",4,3,"IoT,Arduino,Embedded Systems",KICT,Computer Science
+CSCI4603,Blockchain Technology,"Blockchain fundamentals, smart contracts, and cryptocurrency",4,3,"Blockchain,Solidity,Smart Contracts",KICT,Computer Science
+INFO2101,IT Project Management,"Project planning, management methodologies, and team coordination",2,3,"Project Management,Agile,Scrum",KICT,Information Technology
+INFO3101,Business Intelligence,"BI tools, data warehousing, reporting, and analytics",3,3,"BI Tools,Data Warehousing,Tableau",KICT,Information Technology
+INFO3201,System Analysis and Design,"Requirements gathering, system design, and UML modeling",3,3,"UML,System Design,Requirements",KICT,Information Technology
+INFO4101,Digital Marketing,"SEO, social media marketing, analytics, and online advertising",4,3,"Digital Marketing,SEO,Analytics",KICT,Information Technology
+MATH2101,Discrete Mathematics,"Logic, sets, relations, graph theory, and combinatorics",2,3,"Logic,Graph Theory,Mathematics",KICT,Computer Science
+STAT3101,Probability and Statistics,"Probability theory, statistical inference, and data analysis",3,3,"Statistics,Probability,Data Analysis",KICT,Data Science
+ECE2201,Digital Logic Design,"Boolean algebra, logic gates, combinational and sequential circuits",2,3,"Digital Logic,Circuit Design,VHDL",KOE,Electrical Engineering
+ECE2301,Circuit Analysis,"DC and AC circuit analysis, network theorems, and circuit simulation",2,3,"Circuit Analysis,SPICE,Electronics",KOE,Electrical Engineering
+ECE3101,Microprocessor Systems,"Microprocessor architecture, assembly language, and interfacing",3,3,"Microprocessors,Assembly,Embedded Systems",KOE,Electrical Engineering
+ECE3201,Signal Processing,"Digital signal processing, filters, Fourier analysis, and applications",3,3,"Signal Processing,MATLAB,DSP",KOE,Electrical Engineering
+ECE3301,Power Systems,"Power generation, transmission, distribution, and renewable energy",3,3,"Power Systems,Energy,Electrical Grid",KOE,Electrical Engineering
+ECE4101,Communication Systems,"Analog and digital communication, modulation, and wireless systems",4,3,"Communications,Wireless,Modulation",KOE,Electrical Engineering
+ECE4201,Control Systems,"Feedback control, stability analysis, PID controllers, and automation",4,3,"Control Systems,PID,Automation",KOE,Electrical Engineering
+ECE4301,VLSI Design,"Very Large Scale Integration, chip design, and semiconductor technology",4,3,"VLSI,Chip Design,Semiconductors",KOE,Electrical Engineering
+MCT2101,Engineering Mechanics,"Statics, dynamics, forces, moments, and equilibrium",2,3,"Mechanics,Statics,Dynamics",KOE,Mechatronics Engineering
+MCT3101,Robotics,"Robot kinematics, dynamics, control, and autonomous systems",3,3,"Robotics,Automation,Control Systems",KOE,Mechatronics Engineering
+MCT3201,Industrial Automation,"PLCs, SCADA systems, industrial control, and factory automation",3,3,"PLC,SCADA,Industrial Control",KOE,Mechatronics Engineering
+MCT4101,Machine Vision,"Image processing, computer vision, pattern recognition for robotics",4,3,"Computer Vision,Image Processing,OpenCV",KOE,Mechatronics Engineering
+MCT4201,Intelligent Systems,"AI in automation, fuzzy logic, neural networks for control",4,3,"AI,Fuzzy Logic,Neural Networks",KOE,Mechatronics Engineering
+MEE2101,Thermodynamics,"Laws of thermodynamics, heat transfer, and energy systems",2,3,"Thermodynamics,Heat Transfer,Energy",KOE,Mechanical Engineering
+MEE2201,Fluid Mechanics,"Fluid statics, dynamics, flow analysis, and applications",2,3,"Fluid Mechanics,Flow Analysis,CFD",KOE,Mechanical Engineering
+MEE3101,Machine Design,"Mechanical design principles, stress analysis, and CAD",3,3,"Mechanical Design,CAD,SolidWorks",KOE,Mechanical Engineering
+MEE3201,Manufacturing Processes,"Machining, forming, joining processes, and manufacturing systems",3,3,"Manufacturing,Machining,CNC",KOE,Mechanical Engineering
+MEE4101,Automotive Engineering,"Vehicle design, engine systems, and automotive technology",4,3,"Automotive,Engine Design,Vehicle Systems",KOE,Mechanical Engineering
+MEE4201,Renewable Energy Systems,"Solar, wind, hydro energy systems, and sustainability",4,3,"Renewable Energy,Sustainability,Solar Power",KOE,Mechanical Engineering
+CVE2101,Surveying,"Land surveying, leveling, theodolite, and GPS techniques",2,3,"Surveying,GPS,Land Measurement",KOE,Civil Engineering
+CVE2201,Structural Analysis,"Analysis of beams, frames, trusses, and structural design",2,3,"Structural Analysis,Structures,Engineering Design",KOE,Civil Engineering
+CVE3101,Concrete Technology,"Concrete mix design, properties, testing, and applications",3,3,"Concrete,Materials,Construction",KOE,Civil Engineering
+CVE3201,Geotechnical Engineering,"Soil mechanics, foundation design, and earth structures",3,3,"Soil Mechanics,Foundation Design,Geotechnical",KOE,Civil Engineering
+CVE3301,Transportation Engineering,"Highway design, traffic engineering, and transportation systems",3,3,"Transportation,Traffic Engineering,Highway Design",KOE,Civil Engineering
+CVE4101,Construction Management,"Project management, construction planning, and cost estimation",4,3,"Construction Management,Project Planning,Cost Estimation",KOE,Civil Engineering
+CVE4201,Water Resources Engineering,"Hydrology, hydraulics, water supply, and drainage systems",4,3,"Hydrology,Hydraulics,Water Resources",KOE,Civil Engineering
+MFG2101,Manufacturing Technology,"Introduction to manufacturing, materials, and processes",2,3,"Manufacturing,Materials,Production",KOE,Manufacturing Engineering
+MFG3101,Production Planning,"Production scheduling, inventory management, and operations",3,3,"Production Planning,Operations,Supply Chain",KOE,Manufacturing Engineering
+MFG3201,Quality Control,"Statistical quality control, Six Sigma, and quality management",3,3,"Quality Control,Six Sigma,Statistics",KOE,Manufacturing Engineering
+MFG4101,Computer-Aided Manufacturing,"CAM software, CNC programming, and automated manufacturing",4,3,"CAM,CNC,Automation",KOE,Manufacturing Engineering
+MFG4201,Lean Manufacturing,"Lean principles, waste reduction, and continuous improvement",4,3,"Lean Manufacturing,Kaizen,Process Improvement",KOE,Manufacturing Engineering
+BTE2101,Biochemistry,"Biomolecules, metabolism, enzymes, and biochemical pathways",2,3,"Biochemistry,Metabolism,Molecular Biology",KOE,Biotechnology Engineering
+BTE3101,Bioprocess Engineering,"Fermentation, bioreactors, and bioprocessing technology",3,3,"Bioprocess,Fermentation,Bioreactors",KOE,Biotechnology Engineering
+BTE3201,Genetic Engineering,"Recombinant DNA, gene cloning, and genetic modification",3,3,"Genetic Engineering,DNA,Cloning",KOE,Biotechnology Engineering
+BTE4101,Pharmaceutical Biotechnology,"Drug development, biopharmaceuticals, and biomedical applications",4,3,"Pharmaceutical,Drug Development,Biomedicine",KOE,Biotechnology Engineering
+BTE4201,Environmental Biotechnology,"Bioremediation, waste treatment, and environmental applications",4,3,"Bioremediation,Environmental Science,Waste Treatment",KOE,Biotechnology Engineering
+ECON1101,Principles of Economics,"Microeconomics and macroeconomics fundamentals",1,3,"Economics,Microeconomics,Macroeconomics",KENMS,Economics
+ECON2101,Business Economics,"Business decision making, market structures, and pricing",2,3,"Business Economics,Decision Making,Markets",KENMS,Economics
+ECON3101,International Economics,"International trade, finance, and global economic systems",3,3,"International Trade,Global Economics,Finance",KENMS,Economics
+ECON4101,Development Economics,"Economic development, growth theories, and development policies",4,3,"Development Economics,Growth,Policy",KENMS,Economics
+FIN2101,Financial Accounting,"Financial statements, accounting principles, and reporting",2,3,"Accounting,Financial Statements,GAAP",KENMS,Finance
+FIN3101,Corporate Finance,"Capital budgeting, cost of capital, and financial management",3,3,"Corporate Finance,Budgeting,Investment",KENMS,Finance
+FIN3201,Investment Analysis,"Portfolio management, securities analysis, and investment strategies",3,3,"Investment,Portfolio Management,Securities",KENMS,Finance
+FIN4101,Financial Markets,"Stock markets, bonds, derivatives, and financial instruments",4,3,"Financial Markets,Trading,Derivatives",KENMS,Finance
+MGT2101,Principles of Management,"Management functions, planning, organizing, and leadership",2,3,"Management,Leadership,Planning",KENMS,Management
+MGT3101,Human Resource Management,"HR practices, recruitment, training, and employee relations",3,3,"Human Resources,Recruitment,Training",KENMS,Management
+MGT3201,Strategic Management,"Strategic planning, competitive advantage, and business strategy",3,3,"Strategy,Business Planning,Competitive Analysis",KENMS,Management
+MGT4101,Entrepreneurship,"Business planning, startup management, and innovation",4,3,"Entrepreneurship,Business Planning,Innovation",KENMS,Management
+MKT2101,Principles of Marketing,"Marketing concepts, consumer behavior, and marketing mix",2,3,"Marketing,Consumer Behavior,Branding",KENMS,Marketing
+MKT3101,Marketing Research,"Research methods, data collection, and market analysis",3,3,"Market Research,Data Analysis,Surveys",KENMS,Marketing
+MKT3201,Brand Management,"Brand strategy, positioning, and brand equity management",3,3,"Branding,Brand Strategy,Marketing",KENMS,Marketing
+MKT4101,International Marketing,"Global marketing strategies, cross-cultural marketing, and export",4,3,"International Marketing,Global Strategy,Export",KENMS,Marketing
+NURS2101,Fundamentals of Nursing,"Basic nursing skills, patient care, and clinical practice",2,4,"Nursing,Patient Care,Clinical Skills",KAHS,Nursing
+NURS3101,Medical-Surgical Nursing,"Adult nursing care, surgical procedures, and patient management",3,4,"Medical Nursing,Surgery,Patient Care",KAHS,Nursing
+NURS3201,Community Health Nursing,"Public health, community care, and health promotion",3,4,"Community Health,Public Health,Health Promotion",KAHS,Nursing
+NURS4101,Critical Care Nursing,"ICU nursing, emergency care, and advanced patient management",4,4,"Critical Care,ICU,Emergency Nursing",KAHS,Nursing
+PHYS2101,Physiotherapy Foundations,"Anatomy, physiology, and introduction to physiotherapy",2,3,"Physiotherapy,Anatomy,Physiology",KAHS,Physiotherapy
+PHYS3101,Therapeutic Exercise,"Exercise therapy, rehabilitation, and movement science",3,3,"Exercise Therapy,Rehabilitation,Movement",KAHS,Physiotherapy
+PHYS4101,Sports Physiotherapy,"Sports injuries, athletic rehabilitation, and performance",4,3,"Sports Medicine,Athletic Training,Rehabilitation",KAHS,Physiotherapy
+NUTR2101,Introduction to Nutrition,"Nutrients, dietary guidelines, and nutritional assessment",2,3,"Nutrition,Dietetics,Health",KAHS,Nutrition
+NUTR3101,Clinical Nutrition,"Medical nutrition therapy, diet planning for diseases",3,3,"Clinical Nutrition,Diet Planning,Medical Nutrition",KAHS,Nutrition
+NUTR4101,Community Nutrition,"Public health nutrition, nutrition programs, and food security",4,3,"Community Nutrition,Public Health,Food Security",KAHS,Nutrition
+PHARM2101,Pharmaceutical Chemistry,"Drug chemistry, medicinal chemistry, and drug design",2,3,"Pharmaceutical Chemistry,Drug Design,Medicinal Chemistry",KOP,Pharmacy
+PHARM2201,Pharmacology I,"Drug action, pharmacokinetics, and pharmacodynamics",2,3,"Pharmacology,Drug Action,Pharmacokinetics",KOP,Pharmacy
+PHARM3101,Pharmaceutics,"Drug formulation, dosage forms, and drug delivery systems",3,3,"Pharmaceutics,Drug Formulation,Dosage Forms",KOP,Pharmacy
+PHARM3201,Pharmacology II,"Clinical pharmacology, drug interactions, and therapeutics",3,3,"Clinical Pharmacology,Drug Interactions,Therapeutics",KOP,Pharmacy
+PHARM4101,Clinical Pharmacy,"Patient counseling, medication management, and pharmacy practice",4,4,"Clinical Pharmacy,Patient Counseling,Medication Management",KOP,Pharmacy
+PHARM4201,Hospital Pharmacy,"Hospital pharmacy operations, drug distribution, and clinical services",4,4,"Hospital Pharmacy,Drug Distribution,Clinical Services",KOP,Pharmacy
+ARAB1101,Arabic Language I,"Introduction to Arabic language, grammar, and basic communication",1,3,"Arabic,Language Skills,Grammar",KIRKHS,Arabic Language
+ARAB2101,Arabic Language II,"Intermediate Arabic, reading comprehension, and writing",2,3,"Arabic,Reading,Writing",KIRKHS,Arabic Language
+ARAB3101,Advanced Arabic,"Advanced Arabic grammar, literature, and classical texts",3,3,"Arabic,Literature,Classical Arabic",KIRKHS,Arabic Language
+USUL2101,Usul al-Fiqh,"Islamic legal theory, sources of Islamic law, and methodology",2,3,"Islamic Law,Usul Fiqh,Islamic Studies",KIRKHS,Islamic Studies
+QURAN2101,Quranic Studies,"Quranic interpretation, tafsir, and Quranic sciences",2,3,"Quran,Tafsir,Islamic Studies",KIRKHS,Islamic Studies
+HADITH2101,Hadith Studies,"Hadith sciences, authentication, and prophetic traditions",2,3,"Hadith,Islamic Studies,Prophetic Traditions",KIRKHS,Islamic Studies
+FIQH3101,Islamic Jurisprudence,"Fiqh principles, Islamic rulings, and contemporary issues",3,3,"Fiqh,Islamic Law,Jurisprudence",KIRKHS,Islamic Studies
+DAKWAH3101,Islamic Propagation,"Da'wah methods, Islamic outreach, and communication",3,3,"Dakwah,Islamic Communication,Outreach",KIRKHS,Islamic Studies
+ENGL1101,English Composition,"Academic writing, essay structure, and composition skills",1,3,"English,Writing,Composition",KIRKHS,English Language
+ENGL2101,English Literature,"Literary analysis, poetry, prose, and literary criticism",2,3,"English,Literature,Literary Analysis",KIRKHS,English Language
+HIST2101,World History,"Major historical events, civilizations, and global history",2,3,"History,World History,Civilizations",KIRKHS,History
+PSYC2101,Introduction to Psychology,"Psychological theories, behavior, and mental processes",2,3,"Psychology,Human Behavior,Mental Health",KIRKHS,Psychology
+PSYC3101,Developmental Psychology,"Human development across lifespan, child and adolescent psychology",3,3,"Psychology,Human Development,Child Psychology",KIRKHS,Psychology
+SOCI2101,Introduction to Sociology,"Social structures, culture, socialization, and society",2,3,"Sociology,Social Studies,Culture",KIRKHS,Sociology
+COMM2101,Communication Skills,"Interpersonal communication, public speaking, and presentation skills",2,3,"Communication,Public Speaking,Presentation",KIRKHS,Communication

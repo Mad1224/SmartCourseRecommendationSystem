@@ -39,8 +39,14 @@ for _, row in courses_df.iterrows():
         else:
             course['skills'] = []
     
+    if 'kulliyyah' in row and pd.notna(row['kulliyyah']):
+        course['kulliyyah'] = row['kulliyyah']
+    
+    if 'program' in row and pd.notna(row['program']):
+        course['program'] = row['program']
+    
     courses_data.append(course)
-    print(f"  - {course['course_code']}: {course['course_name']}")
+    print(f"  - {course['course_code']}: {course['course_name']} ({course.get('kulliyyah', 'N/A')})")
 
 # Insert courses
 if courses_data:

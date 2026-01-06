@@ -4,6 +4,10 @@ from flask_jwt_extended import JWTManager
 from config.config import Config
 from database.mongo import mongo
 
+# Load ML models FIRST before importing routes
+from ml.recommendation_engine import recommendation_engine
+recommendation_engine.load_models()
+
 from routes import register_routes
 from routes.auth_routes import auth_bp
 from routes.course_routes import course_bp
@@ -69,7 +73,7 @@ def create_app():
     def health_check():
         return jsonify({
             "status": "healthy",
-            "database": "connected" if mongo.db else "disconnected"
+            "database": "connected" if mongo.db is not None else "disconnected"
         })
     
     return app
