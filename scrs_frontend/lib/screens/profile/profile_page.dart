@@ -3,8 +3,6 @@ import '../../services/user_service.dart';
 import '../../services/session.dart';
 import '../login/login_page.dart';
 import '../dashboard/dashboard_page.dart';
-import '../course_catalog/course_catalog_page.dart';
-import '../feedback/feedback_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

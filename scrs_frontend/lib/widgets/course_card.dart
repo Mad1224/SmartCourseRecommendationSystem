@@ -8,12 +8,12 @@ class CourseCard extends StatelessWidget {
   final bool showScore;
 
   const CourseCard({
-    Key? key,
+    super.key,
     required this.course,
     this.onTap,
     this.onEnroll,
     this.showScore = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

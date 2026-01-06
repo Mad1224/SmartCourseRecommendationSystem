@@ -30,14 +30,6 @@ def create_app():
     CORS(app)
 
     register_routes(app)
-#    app.register_blueprint(enrollment_bp)
-#    app.register_blueprint(recommend_routes)
-#    app.register_blueprint(preferences_bp, url_prefix="/preferences")
-#    app.register_blueprint(academic_bp, url_prefix="/academic")
-#    app.register_blueprint(metrics_bp)
-#    app.register_blueprint(auth_bp)
-#    app.register_blueprint(course_bp)
-#    app.register_blueprint(feedback_bp)
 
     # Error handlers
     @app.errorhandler(404)

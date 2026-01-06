@@ -6,7 +6,6 @@ from datetime import datetime
 
 academic_bp = Blueprint("academic", __name__, url_prefix="/academic")
 
-# ---------- SAVE/UPDATE ACADEMIC DATA ----------
 @academic_bp.route("/", methods=["POST"])
 @jwt_required()
 def save_academic_data():
@@ -59,7 +58,6 @@ def save_academic_data():
         return jsonify({"msg": "Academic data saved successfully"}), 201
 
 
-# ---------- GET ACADEMIC DATA ----------
 @academic_bp.route("/", methods=["GET"])
 @jwt_required()
 def get_academic_data():
@@ -77,7 +75,6 @@ def get_academic_data():
     return jsonify(academic_data), 200
 
 
-# ---------- ADD COURSE TO TRANSCRIPT ----------
 @academic_bp.route("/course", methods=["POST"])
 @jwt_required()
 def add_course():
@@ -116,7 +113,6 @@ def add_course():
     return jsonify({"msg": "Course added successfully"}), 201
 
 
-# ---------- UPDATE COURSE IN TRANSCRIPT ----------
 @academic_bp.route("/course/<course_code>", methods=["PUT"])
 @jwt_required()
 def update_course(course_code):
@@ -167,7 +163,6 @@ def update_course(course_code):
     return jsonify({"msg": "Course updated successfully"}), 200
 
 
-# ---------- DELETE COURSE FROM TRANSCRIPT ----------
 @academic_bp.route("/course/<course_code>", methods=["DELETE"])
 @jwt_required()
 def delete_course(course_code):
@@ -188,7 +183,6 @@ def delete_course(course_code):
     return jsonify({"msg": "Course deleted successfully"}), 200
 
 
-# ---------- GET COURSES BY SEMESTER ----------
 @academic_bp.route("/semester/<int:semester>", methods=["GET"])
 @jwt_required()
 def get_courses_by_semester(semester):
@@ -209,7 +203,6 @@ def get_courses_by_semester(semester):
     return jsonify({"semester": semester, "courses": courses}), 200
 
 
-# ---------- UPDATE CGPA ----------
 @academic_bp.route("/cgpa", methods=["PUT"])
 @jwt_required()
 def update_cgpa():
@@ -244,7 +237,6 @@ def update_cgpa():
     return jsonify({"msg": "CGPA updated successfully"}), 200
 
 
-# ---------- GET ACADEMIC STATISTICS ----------
 @academic_bp.route("/statistics", methods=["GET"])
 @jwt_required()
 def get_statistics():

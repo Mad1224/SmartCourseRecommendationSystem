@@ -258,7 +258,7 @@ class _RequestAdvisingPageState extends State<RequestAdvisingPage> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
-              value: selectedAdvisingType,
+              initialValue: selectedAdvisingType,
               decoration: InputDecoration(
                 hintText: 'Select advising type',
                 prefixIcon:
@@ -330,7 +330,7 @@ class _RequestAdvisingPageState extends State<RequestAdvisingPage> {
                     ),
                   )
                 : DropdownButtonFormField<String>(
-                    value: selectedLecturer,
+                    initialValue: selectedLecturer,
                     decoration: InputDecoration(
                       hintText: 'Auto-assign to available lecturer',
                       prefixIcon:

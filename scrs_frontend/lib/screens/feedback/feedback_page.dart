@@ -665,14 +665,14 @@ class _FeedbackPageState extends State<FeedbackPage>
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(12),
                                 onTap: () => _showFeedbackDialog(course),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
                                     horizontal: 20,
                                     vertical: 12,
                                   ),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
-                                    children: const [
+                                    children: [
                                       Icon(
                                         Icons.rate_review_rounded,
                                         color: Colors.white,

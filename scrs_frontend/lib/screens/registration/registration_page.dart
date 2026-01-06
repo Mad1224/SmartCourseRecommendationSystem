@@ -528,7 +528,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
-            value: selectedKulliyyah,
+            initialValue: selectedKulliyyah,
             decoration: InputDecoration(
               hintText: 'Select your kulliyyah',
               prefixIcon: const Icon(Icons.school_outlined),
@@ -564,7 +564,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
-            value: selectedProgramme,
+            initialValue: selectedProgramme,
             decoration: InputDecoration(
               hintText: 'Select your programme',
               prefixIcon: const Icon(Icons.book_outlined),
@@ -602,7 +602,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           const SizedBox(height: 8),
           DropdownButtonFormField<int>(
-            value: selectedYear,
+            initialValue: selectedYear,
             decoration: InputDecoration(
               hintText: 'Select your year',
               prefixIcon: const Icon(Icons.calendar_today_outlined),
@@ -794,23 +794,23 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 12),
                     child: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
+                      text: const TextSpan(
+                        style: TextStyle(
                             fontSize: 13, color: Colors.black87),
                         children: [
-                          const TextSpan(text: 'I agree to the '),
+                          TextSpan(text: 'I agree to the '),
                           TextSpan(
                             text: 'Terms and Conditions',
                             style: TextStyle(
-                              color: const Color(0xFF00796B),
+                              color: Color(0xFF00796B),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const TextSpan(text: ' and '),
+                          TextSpan(text: ' and '),
                           TextSpan(
                             text: 'Privacy Policy',
                             style: TextStyle(
-                              color: const Color(0xFF00796B),
+                              color: Color(0xFF00796B),
                               fontWeight: FontWeight.bold,
                             ),
                           ),

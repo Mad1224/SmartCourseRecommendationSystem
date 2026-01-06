@@ -7,7 +7,6 @@ from datetime import datetime
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
-# ---------- REGISTER ----------
 @auth_bp.route("/register", methods=["POST"])
 def register():
     """
@@ -90,7 +89,6 @@ def register():
     }), 201
 
 
-# ---------- LOGIN ----------
 @auth_bp.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -111,14 +109,12 @@ def login():
     return jsonify({"token": token})
 
 
-# ---------- PROTECTED ----------
 @auth_bp.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
     user_id = get_jwt_identity()
     return jsonify({"logged_in_as": user_id})
 
-# ---------- GET CURRENT USER ----------
 @auth_bp.route("/me", methods=["GET"])
 @jwt_required()
 def get_me():

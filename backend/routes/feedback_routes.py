@@ -6,7 +6,6 @@ from datetime import datetime
 
 feedback_bp = Blueprint("feedback", __name__, url_prefix="/feedback")
 
-# ------------------ SUBMIT FEEDBACK ------------------
 @feedback_bp.route("/", methods=["POST"])
 @jwt_required()
 def add_feedback():
@@ -84,7 +83,6 @@ def add_feedback():
     }), 201
 
 
-# ------------------ GET ALL FEEDBACK ------------------
 @feedback_bp.route("/all", methods=["GET"])
 @jwt_required()
 def get_all_feedback():
@@ -103,7 +101,6 @@ def get_all_feedback():
         return jsonify({"msg": f"Error fetching feedback: {str(e)}"}), 500
 
 
-# ------------------ GET FEEDBACK FOR SPECIFIC COURSE ------------------
 @feedback_bp.route("/course/<course_code>", methods=["GET"])
 @jwt_required()
 def get_course_feedback(course_code):
@@ -133,7 +130,6 @@ def get_course_feedback(course_code):
         return jsonify({"msg": f"Error fetching feedback: {str(e)}"}), 500
 
 
-# ------------------ GET MY FEEDBACK ------------------
 @feedback_bp.route("/my", methods=["GET"])
 @jwt_required()
 def get_my_feedback():
@@ -151,7 +147,6 @@ def get_my_feedback():
         return jsonify({"msg": f"Error fetching your feedback: {str(e)}"}), 500
 
 
-# ------------------ UPDATE FEEDBACK ------------------
 @feedback_bp.route("/<feedback_id>", methods=["PUT"])
 @jwt_required()
 def update_feedback(feedback_id):
@@ -202,7 +197,6 @@ def update_feedback(feedback_id):
         return jsonify({"msg": f"Error updating feedback: {str(e)}"}), 500
 
 
-# ------------------ DELETE FEEDBACK ------------------
 @feedback_bp.route("/<feedback_id>", methods=["DELETE"])
 @jwt_required()
 def delete_feedback(feedback_id):
@@ -233,7 +227,6 @@ def delete_feedback(feedback_id):
         return jsonify({"msg": f"Error deleting feedback: {str(e)}"}), 500
 
 
-# ------------------ LIKE FEEDBACK ------------------
 @feedback_bp.route("/<feedback_id>/like", methods=["POST"])
 @jwt_required()
 def like_feedback(feedback_id):
@@ -259,7 +252,6 @@ def like_feedback(feedback_id):
         return jsonify({"msg": f"Error liking feedback: {str(e)}"}), 500
 
 
-# ------------------ GET COURSES TAKEN (FOR FEEDBACK) ------------------
 @feedback_bp.route("/courses-taken", methods=["GET"])
 @jwt_required()
 def get_courses_taken():
@@ -300,7 +292,6 @@ def get_courses_taken():
         return jsonify({"msg": f"Error fetching courses: {str(e)}"}), 500
 
 
-# ------------------ GET STATISTICS ------------------
 @feedback_bp.route("/stats", methods=["GET"])
 @jwt_required()
 def get_feedback_stats():

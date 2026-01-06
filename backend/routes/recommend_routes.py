@@ -9,8 +9,6 @@ recommend_routes = Blueprint(
     url_prefix="/recommend"
 )
 
-# Models will be loaded by app.py during initialization
-
 @recommend_routes.route("/", methods=["GET", "POST"])
 @jwt_required()
 def recommend():
@@ -28,36 +26,31 @@ def recommend():
             "instructions": "Run: python rebuild_models.py"
         }), 503
     
-    # ========== GET USER PREFERENCES ==========
     prefs = mongo.db.preferences.find_one(
         {"user_id": user_id},
         sort=[("created_at", -1)]
     )
     
-    # ========== GET ALL COURSES FROM DATABASE ==========
     all_courses = list(mongo.db.courses.find({}))
     
     if not all_courses:
         return jsonify([]), 200
     
-    # ========== GET COURSES ALREADY TAKEN ==========
     academic_data = mongo.db.academic_data.find_one({"user_id": user_id})
     taken_course_codes = set()
     
     if academic_data and academic_data.get("courses_taken"):
         taken_course_codes = {c.get("course_code") for c in academic_data.get("courses_taken", [])}
     
-    # Also check current enrollments
+
     enrollments = list(mongo.db.enrollments.find({"user_id": user_id}))
     for enrollment in enrollments:
         course = mongo.db.courses.find_one({"_id": enrollment.get("course_id")})
         if course:
             taken_course_codes.add(course.get("course_code"))
     
-    # ========== GET USER FEEDBACK FOR COLLABORATIVE FILTERING ==========
     feedback_docs = list(mongo.db.feedback.find({"user_id": user_id}))
     
-    # ========== BUILD USER QUERY FROM PREFERENCES ==========
     user_interests = []
     preferred_kulliyyah = None
     
@@ -105,11 +98,9 @@ def recommend():
     print(f"Taken Courses: {len(taken_course_codes)}")
     print(f"Feedback Count: {len(feedback_docs)}")
     
-    # ========== PREPARE COURSE DATA ==========
     course_codes = [c.get("course_code") for c in all_courses]
     
     try:
-        # ========== GENERATE HYBRID RECOMMENDATIONS ==========
         final_scores, alpha_used, content_scores, collab_scores = recommendation_engine.hybrid_recommend(
             user_query=user_query,
             course_codes=course_codes,
@@ -121,13 +112,11 @@ def recommend():
         print(f"Collab Scores - Max: {collab_scores.max():.3f}, Mean: {collab_scores.mean():.3f}")
         print(f"Final Scores - Max: {final_scores.max():.3f}, Mean: {final_scores.mean():.3f}")
         
-        # ========== BUILD RECOMMENDATIONS LIST ==========
         recommendations = []
         
         for i, course in enumerate(all_courses):
             course_code = course.get("course_code")
             
-            # Skip courses already taken
             if course_code in taken_course_codes:
                 continue
             
@@ -177,14 +166,12 @@ def recommend():
                 "matches_preference": preferred_kulliyyah == course.get("kulliyyah") if preferred_kulliyyah else False
             })
         
-        # Sort by score
         recommendations.sort(key=lambda x: x["score"], reverse=True)
         
         print(f"Generated {len(recommendations)} recommendations")
         print(f"Top 5 scores: {[r['score'] for r in recommendations[:5]]}")
         print(f"{'='*60}\n")
         
-        # Return top 10 recommendations
         return jsonify(recommendations[:10]), 200
         
     except Exception as e:
@@ -206,7 +193,6 @@ def reload_models():
     """
     user_id = get_jwt_identity()
     
-    # Check if user is admin
     from bson import ObjectId
     user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
     

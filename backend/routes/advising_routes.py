@@ -6,7 +6,6 @@ from datetime import datetime
 
 advising_bp = Blueprint("advising", __name__, url_prefix="/advising")
 
-# ------------------ SUBMIT ADVISING REQUEST ------------------
 @advising_bp.route("/request", methods=["POST"])
 @jwt_required()
 def submit_advising_request():
@@ -67,9 +66,6 @@ def submit_advising_request():
 
     result = mongo.db.advising_requests.insert_one(request_doc)
 
-    # TODO: Send email notification to academic office
-    # send_notification_email(user.get("email"), "Advising Request Submitted")
-
     return jsonify({
         "msg": "Advising request submitted successfully",
         "request_id": str(result.inserted_id),
@@ -77,7 +73,6 @@ def submit_advising_request():
     }), 201
 
 
-# ------------------ GET AVAILABLE LECTURERS ------------------
 @advising_bp.route("/lecturers", methods=["GET"])
 @jwt_required()
 def get_available_lecturers():
@@ -104,7 +99,6 @@ def get_available_lecturers():
         return jsonify({"msg": f"Error fetching lecturers: {str(e)}"}), 500
 
 
-# ------------------ GET MY REQUESTS (STUDENT) ------------------
 @advising_bp.route("/my-requests", methods=["GET"])
 @jwt_required()
 def get_my_requests():
@@ -136,7 +130,6 @@ def get_my_requests():
         return jsonify({"msg": f"Error fetching requests: {str(e)}"}), 500
 
 
-# ------------------ GET REQUEST DETAILS ------------------
 @advising_bp.route("/request/<request_id>", methods=["GET"])
 @jwt_required()
 def get_request_details(request_id):
@@ -178,7 +171,6 @@ def get_request_details(request_id):
         return jsonify({"msg": f"Error fetching request: {str(e)}"}), 500
 
 
-# ------------------ CANCEL REQUEST (STUDENT) ------------------
 @advising_bp.route("/request/<request_id>", methods=["DELETE"])
 @jwt_required()
 def cancel_request(request_id):
@@ -216,7 +208,6 @@ def cancel_request(request_id):
         return jsonify({"msg": f"Error cancelling request: {str(e)}"}), 500
 
 
-# ------------------ ADMIN/STAFF: GET ALL REQUESTS ------------------
 @advising_bp.route("/admin/requests", methods=["GET"])
 @jwt_required()
 def get_all_requests():
@@ -257,7 +248,6 @@ def get_all_requests():
         return jsonify({"msg": f"Error fetching requests: {str(e)}"}), 500
 
 
-# ------------------ ADMIN/STAFF: UPDATE REQUEST STATUS ------------------
 @advising_bp.route("/admin/request/<request_id>/status", methods=["PUT"])
 @jwt_required()
 def update_request_status(request_id):
@@ -326,7 +316,6 @@ def update_request_status(request_id):
         return jsonify({"msg": f"Error updating request: {str(e)}"}), 500
 
 
-# ------------------ GET REQUEST STATISTICS ------------------
 @advising_bp.route("/stats", methods=["GET"])
 @jwt_required()
 def get_advising_stats():

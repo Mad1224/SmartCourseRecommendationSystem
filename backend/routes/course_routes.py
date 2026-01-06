@@ -6,7 +6,6 @@ from datetime import datetime
 
 course_bp = Blueprint("courses", __name__, url_prefix="/courses")
 
-# ------------------ GET ALL COURSES ------------------
 @course_bp.route("/", methods=["GET"])
 @jwt_required()
 def get_courses():
@@ -49,7 +48,6 @@ def get_courses():
         return jsonify({"msg": f"Error fetching courses: {str(e)}"}), 500
 
 
-# ------------------ GET AVAILABLE COURSES ONLY ------------------
 @course_bp.route("/available", methods=["GET"])
 @jwt_required()
 def get_available_courses():
@@ -81,7 +79,6 @@ def get_available_courses():
         return jsonify({"msg": f"Error fetching available courses: {str(e)}"}), 500
 
 
-# ------------------ GET COURSE BY ID ------------------
 @course_bp.route("/<course_id>", methods=["GET"])
 @jwt_required()
 def get_course(course_id):
@@ -113,7 +110,6 @@ def get_course(course_id):
         return jsonify({"msg": f"Error fetching course: {str(e)}"}), 500
 
 
-# ------------------ GET COURSES BY LEVEL ------------------
 @course_bp.route("/level/<int:level>", methods=["GET"])
 @jwt_required()
 def get_courses_by_level(level):
@@ -144,7 +140,6 @@ def get_courses_by_level(level):
         return jsonify({"msg": f"Error fetching courses: {str(e)}"}), 500
 
 
-# ------------------ SEARCH COURSES ------------------
 @course_bp.route("/search", methods=["GET"])
 @jwt_required()
 def search_courses():
@@ -193,7 +188,6 @@ def search_courses():
         return jsonify({"msg": f"Error searching courses: {str(e)}"}), 500
 
 
-# ------------------ ADMIN: ADD COURSE ------------------
 @course_bp.route("/", methods=["POST"])
 @jwt_required()
 def add_course():
@@ -259,7 +253,6 @@ def add_course():
     }), 201
 
 
-# ------------------ ADMIN: UPDATE COURSE ------------------
 @course_bp.route("/<course_id>", methods=["PUT"])
 @jwt_required()
 def update_course(course_id):
@@ -300,7 +293,6 @@ def update_course(course_id):
     return jsonify({"msg": "Course updated successfully"}), 200
 
 
-# ------------------ ADMIN: DELETE COURSE ------------------
 @course_bp.route("/<course_id>", methods=["DELETE"])
 @jwt_required()
 def delete_course(course_id):
@@ -320,7 +312,6 @@ def delete_course(course_id):
     return jsonify({"msg": "Course deleted successfully"}), 200
 
 
-# ------------------ ADMIN: SET COURSE AVAILABILITY ------------------
 @course_bp.route("/<course_id>/availability", methods=["PUT"])
 @jwt_required()
 def set_course_availability(course_id):
@@ -363,7 +354,6 @@ def set_course_availability(course_id):
     return jsonify({"msg": "Course availability updated"}), 200
 
 
-# ------------------ GET COURSE STATISTICS ------------------
 @course_bp.route("/stats", methods=["GET"])
 @jwt_required()
 def get_course_stats():
