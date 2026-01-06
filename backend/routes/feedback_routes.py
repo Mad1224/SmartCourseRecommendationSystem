@@ -43,6 +43,17 @@ def add_feedback():
     if not user:
         return jsonify({"msg": "User not found"}), 404
 
+    # Check if user has taken this course (from academic data)
+    academic_data = mongo.db.academic_data.find_one({"user_id": user_id})
+    if not academic_data:
+        return jsonify({"msg": "You haven't taken any courses yet"}), 400
+    
+    courses_taken = academic_data.get("courses_taken", [])
+    course_codes_taken = [c["course_code"] for c in courses_taken]
+    
+    if course_code not in course_codes_taken:
+        return jsonify({"msg": "You can only give feedback for courses you have taken"}), 400
+
     # Check if user already gave feedback for this course
     existing_feedback = mongo.db.feedback.find_one({
         "user_id": user_id,
@@ -246,6 +257,47 @@ def like_feedback(feedback_id):
     
     except Exception as e:
         return jsonify({"msg": f"Error liking feedback: {str(e)}"}), 500
+
+
+# ------------------ GET COURSES TAKEN (FOR FEEDBACK) ------------------
+@feedback_bp.route("/courses-taken", methods=["GET"])
+@jwt_required()
+def get_courses_taken():
+    """Get courses that user has taken (can give feedback on)"""
+    user_id = get_jwt_identity()
+    
+    try:
+        # Get courses from academic data (courses user has completed)
+        academic_data = mongo.db.academic_data.find_one({"user_id": user_id})
+        
+        if not academic_data or not academic_data.get("courses_taken"):
+            return jsonify([]), 200
+        
+        courses_taken = academic_data.get("courses_taken", [])
+        
+        # Get feedback already submitted by user
+        existing_feedback = list(mongo.db.feedback.find(
+            {"user_id": user_id},
+            {"course_code": 1}
+        ))
+        feedback_course_codes = {fb["course_code"] for fb in existing_feedback}
+        
+        # Filter out courses that already have feedback
+        available_courses = [
+            {
+                "course_code": course["course_code"],
+                "course_name": course["course_name"],
+                "grade": course.get("grade"),
+                "semester_taken": course.get("semester_taken")
+            }
+            for course in courses_taken
+            if course["course_code"] not in feedback_course_codes
+        ]
+        
+        return jsonify(available_courses), 200
+    
+    except Exception as e:
+        return jsonify({"msg": f"Error fetching courses: {str(e)}"}), 500
 
 
 # ------------------ GET STATISTICS ------------------

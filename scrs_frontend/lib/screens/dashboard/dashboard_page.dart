@@ -434,9 +434,6 @@ class _DashboardPageState extends State<DashboardPage> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Browse'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.feedback_outlined), label: 'Feedback'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
@@ -444,13 +441,7 @@ class _DashboardPageState extends State<DashboardPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const CourseCatalogPage()));
-          } else if (index == 2) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const FeedbackPage()));
-          } else if (index == 3) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ProfilePage()));
+                    builder: (context) => const ProfilePage()));
           }
         },
       ),

@@ -117,4 +117,21 @@ class FeedbackService {
       throw Exception('Failed to update feedback: ${response.body}');
     }
   }
+
+  /// Get courses taken (available for feedback)
+  static Future<List<dynamic>> getCoursesTaken() async {
+    final response = await http.get(
+      Uri.parse('${ApiConfig.baseUrl}/feedback/courses-taken'),
+      headers: {
+        'Authorization': 'Bearer ${Session.token}',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to load courses: ${response.body}');
+    }
+  }
 }

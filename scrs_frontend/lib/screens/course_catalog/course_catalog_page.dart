@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../services/course_service.dart';
 import '../../models/course.dart';
+import '../dashboard/dashboard_page.dart';
+import '../feedback/feedback_page.dart';
+import '../profile/profile_page.dart';
 
 class CourseCatalogPage extends StatefulWidget {
   const CourseCatalogPage({super.key});

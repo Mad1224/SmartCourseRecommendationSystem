@@ -3,6 +3,8 @@ import '../../services/user_service.dart';
 import '../../services/session.dart';
 import '../login/login_page.dart';
 import '../dashboard/dashboard_page.dart';
+import '../course_catalog/course_catalog_page.dart';
+import '../feedback/feedback_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -187,15 +189,12 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 3,
+        currentIndex: 1,
         selectedItemColor: const Color(0xFF00796B),
         unselectedItemColor: Colors.grey[600],
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Browse'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.feedback_outlined), label: 'Feedback'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {

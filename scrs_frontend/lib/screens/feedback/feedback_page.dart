@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../services/feedback_services.dart';
-import '../../services/enrollment_service.dart';
+import '../dashboard/dashboard_page.dart';
+import '../course_catalog/course_catalog_page.dart';
+import '../profile/profile_page.dart';
 
 class FeedbackPage extends StatefulWidget {
   const FeedbackPage({super.key});
@@ -14,10 +16,12 @@ class _FeedbackPageState extends State<FeedbackPage>
   late TabController _tabController;
 
   bool isLoadingFeedback = true;
-  bool isLoadingEnrolled = true;
+  bool isLoadingCourses = true;
+  bool isLoadingMyFeedback = true;
 
   List<dynamic> allFeedback = [];
-  List<dynamic> enrolledCourses = [];
+  List<dynamic> coursesTaken = [];
+  List<dynamic> myFeedback = [];
 
   String selectedFilter = 'All';
   final List<String> filters = [
@@ -34,9 +38,10 @@ class _FeedbackPageState extends State<FeedbackPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     loadFeedback();
-    loadEnrolledCourses();
+    loadCoursesTaken();
+    loadMyFeedback();
   }
 
   @override
@@ -64,16 +69,29 @@ class _FeedbackPageState extends State<FeedbackPage>
     }
   }
 
-  Future<void> loadEnrolledCourses() async {
-    setState(() => isLoadingEnrolled = true);
+  Future<void> loadCoursesTaken() async {
+    setState(() => isLoadingCourses = true);
     try {
-      final courses = await EnrollmentService.getMyEnrollments();
+      final courses = await FeedbackService.getCoursesTaken();
       setState(() {
-        enrolledCourses = courses;
-        isLoadingEnrolled = false;
+        coursesTaken = courses;
+        isLoadingCourses = false;
       });
     } catch (e) {
-      setState(() => isLoadingEnrolled = false);
+      setState(() => isLoadingCourses = false);
+    }
+  }
+
+  Future<void> loadMyFeedback() async {
+    setState(() => isLoadingMyFeedback = true);
+    try {
+      final feedback = await FeedbackService.getMyFeedback();
+      setState(() {
+        myFeedback = feedback;
+        isLoadingMyFeedback = false;
+      });
+    } catch (e) {
+      setState(() => isLoadingMyFeedback = false);
     }
   }
 
@@ -128,6 +146,7 @@ class _FeedbackPageState extends State<FeedbackPage>
           tabs: const [
             Tab(text: 'View Feedback'),
             Tab(text: 'Give Feedback'),
+            Tab(text: 'My Feedback'),
           ],
         ),
       ),
@@ -136,6 +155,7 @@ class _FeedbackPageState extends State<FeedbackPage>
         children: [
           _buildViewFeedbackTab(),
           _buildGiveFeedbackTab(),
+          _buildMyFeedbackTab(),
         ],
       ),
     );
@@ -509,9 +529,9 @@ class _FeedbackPageState extends State<FeedbackPage>
 
   // ==================== GIVE FEEDBACK TAB ====================
   Widget _buildGiveFeedbackTab() {
-    return isLoadingEnrolled
+    return isLoadingCourses
         ? const Center(child: CircularProgressIndicator())
-        : enrolledCourses.isEmpty
+        : coursesTaken.isEmpty
             ? Center(
                 child: Padding(
                   padding: const EdgeInsets.all(32),
@@ -522,7 +542,7 @@ class _FeedbackPageState extends State<FeedbackPage>
                           size: 64, color: Colors.grey[300]),
                       const SizedBox(height: 16),
                       Text(
-                        'No Enrolled Courses',
+                        'No Completed Courses',
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -530,7 +550,7 @@ class _FeedbackPageState extends State<FeedbackPage>
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Enroll in courses to provide feedback',
+                        'Complete courses to provide feedback',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                       ),
@@ -540,32 +560,140 @@ class _FeedbackPageState extends State<FeedbackPage>
               )
             : ListView.builder(
                 padding: const EdgeInsets.all(16),
-                itemCount: enrolledCourses.length,
+                itemCount: coursesTaken.length,
                 itemBuilder: (context, index) {
-                  final course = enrolledCourses[index];
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.all(16),
-                      leading: CircleAvatar(
-                        backgroundColor:
-                            const Color(0xFF00796B).withOpacity(0.1),
-                        child: const Icon(Icons.book, color: Color(0xFF00796B)),
+                  final course = coursesTaken[index];
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xFF00796B).withOpacity(0.05),
+                          Colors.white,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                      title: Text(
-                        course['course_name'] ?? 'Course',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: const Color(0xFF00796B).withOpacity(0.2),
+                        width: 1,
                       ),
-                      subtitle: Text(course['course_code'] ?? ''),
-                      trailing: ElevatedButton(
-                        onPressed: () => _showFeedbackDialog(course),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF00796B),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
                         ),
-                        child: const Text('Add Feedback'),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 56,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF00796B), Color(0xFF009688)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF00796B).withOpacity(0.3),
+                                  spreadRadius: 1,
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.book_rounded,
+                              color: Colors.white,
+                              size: 28,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  course['course_name'] ?? 'Course',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Color(0xFF212121),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  course['course_code'] ?? '',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.grey[600],
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF00796B), Color(0xFF009688)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF00796B).withOpacity(0.4),
+                                  spreadRadius: 0,
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(12),
+                                onTap: () => _showFeedbackDialog(course),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 12,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: const [
+                                      Icon(
+                                        Icons.rate_review_rounded,
+                                        color: Colors.white,
+                                        size: 18,
+                                      ),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        'Review',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -649,7 +777,9 @@ class _FeedbackPageState extends State<FeedbackPage>
                       const SnackBar(
                           content: Text('Feedback submitted successfully!')),
                     );
-                    loadFeedback(); // Refresh feedback list
+                    loadFeedback(); // Refresh all feedback
+                    loadMyFeedback(); // Refresh my feedback
+                    loadCoursesTaken(); // Refresh courses taken list
                   }
                 } catch (e) {
                   if (mounted) {
@@ -687,6 +817,166 @@ class _FeedbackPageState extends State<FeedbackPage>
       }
     } catch (e) {
       return '';
+    }
+  }
+
+  // ==================== MY FEEDBACK TAB ====================
+  Widget _buildMyFeedbackTab() {
+    // Filter out feedback with no course name or "Course" as name
+    final validFeedback = myFeedback.where((fb) {
+      final name = fb['course_name'] ?? '';
+      return name.isNotEmpty && name != 'Course';
+    }).toList();
+
+    return isLoadingMyFeedback
+        ? const Center(child: CircularProgressIndicator())
+        : RefreshIndicator(
+                onRefresh: loadMyFeedback,
+                child: validFeedback.isEmpty
+                    ? ListView(
+                        children: const [
+                          SizedBox(height: 200),
+                        ],
+                      )
+                    : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: validFeedback.length,
+                  itemBuilder: (context, index) {
+                    final feedback = validFeedback[index];
+                    final courseCode = feedback['course_code'] ?? 'UNKNOWN';
+                    final courseName = feedback['course_name'] ?? '';
+                    final rating = feedback['rating'] ?? 0;
+                    final comment = feedback['comment'] ?? '';
+                    final timestamp = feedback['created_at'] ?? '';
+
+                    return Card(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        courseName,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        courseCode,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red),
+                                  onPressed: () =>
+                                      _confirmDeleteFeedback(feedback),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: List.generate(5, (starIndex) {
+                                return Icon(
+                                  starIndex < rating
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  size: 20,
+                                  color: Colors.amber,
+                                );
+                              }),
+                            ),
+                            if (comment.isNotEmpty) ...[
+                              const SizedBox(height: 12),
+                              Text(
+                                comment,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[700],
+                                  height: 1.4,
+                                ),
+                              ),
+                            ],
+                            const SizedBox(height: 8),
+                            Text(
+                              _formatTimestamp(timestamp),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+  }
+
+  void _confirmDeleteFeedback(Map<String, dynamic> feedback) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Feedback'),
+        content: const Text(
+          'Are you sure you want to delete this feedback? This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await _deleteFeedback(feedback['_id']);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+            ),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _deleteFeedback(String feedbackId) async {
+    try {
+      await FeedbackService.deleteFeedback(feedbackId);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Feedback deleted successfully')),
+        );
+        // Refresh all feedback lists
+        loadMyFeedback();
+        loadFeedback();
+        loadCoursesTaken(); // Refresh Give Feedback tab
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error deleting feedback: $e')),
+        );
+      }
     }
   }
 }
